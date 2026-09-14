@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+*.lock
+
+# Build outputs
+dist/
+dist-electron/
+
+# Environment
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# Tests and local test scripts
+tests/
+test.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary
+.cache/
+.tmp_test/
+.tmp_test_cjs/
+scratch/
+temp/
+tmp/
