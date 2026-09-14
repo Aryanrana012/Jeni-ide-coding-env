@@ -108,9 +108,3 @@ npm run build
    - All File Explorer operations (create, rename, delete, read, write) are strictly restricted to paths within the active workspace root to prevent unintended file system modifications outside project boundaries.
 
 ---
-
-## 🤖 Recommended Next Steps for Jeni AI Agent (Phase 2)
-
-1. **Backend LLM Integration**: Connect the decoupled `AgentTool` registry in `src/types/aiAgent.ts` to OpenAI, Anthropic, or local LLM backends (Ollama/llama.cpp).
-2. **Tool Execution Engine**: Register filesystem tools (`read_file`, `write_file`, `search_code`), terminal tools (`run_command`), and diff review tools into the Agent Loop.
-3. **Session State Persistence**: Expand `recent-projects.json` into a full workspace state database to preserve open tabs, split panes, and active agent conversations across sessions.
