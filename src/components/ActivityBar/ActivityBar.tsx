@@ -2,7 +2,7 @@ import React from 'react';
 import { Files, Search, GitBranch, Blocks, Bot, Settings, FolderOpen } from 'lucide-react';
 import { useIDEStore, SidebarSection } from '../../store/ideStore';
 
-export const ActivityBar: React.FC = () => {
+export const ActivityBar: React.FC<{ onOpenSettings: () => void }> = ({ onOpenSettings }) => {
   const { sidebarSection, setSidebarSection, isSidebarCollapsed, openFolder, workspaceRoot } = useIDEStore();
 
   const navItems: { id: SidebarSection; label: string; icon: React.ReactNode }[] = [
@@ -59,6 +59,7 @@ export const ActivityBar: React.FC = () => {
       <div className="flex flex-col items-center gap-2">
         <button
           title="Settings"
+          onClick={onOpenSettings}
           className="p-2.5 rounded-xl text-gray-400 hover:text-gray-200 hover:bg-surface-highlight transition-all"
         >
           <Settings className="w-5 h-5" />
