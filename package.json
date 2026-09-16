@@ -7,9 +7,39 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "dist": "npm run build && electron-builder --win",
     "lint": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
     "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.jeni.ide",
+    "productName": "Jeni IDE",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
@@ -29,6 +59,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "electron": "^31.3.1",
+    "electron-builder": "^25.1.8",
     "node-pty": "^1.0.0",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",
