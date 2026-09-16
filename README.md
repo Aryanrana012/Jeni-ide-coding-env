@@ -91,6 +91,20 @@ To compile TypeScript and build the production bundle:
 npm run build
 ```
 
+### Creating a Windows Installer
+To create a Windows NSIS installer locally:
+```bash
+npm run dist
+```
+
+The installer is written to `release/`. GitHub Actions builds and publishes the installer automatically when a version tag such as `v0.1.0` is pushed. Create a release with:
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The generated `.exe` installer is then available from the repository's GitHub Releases page.
+
 ---
 
 ## ⚠️ Known Limitations & Design Scope Boundary
