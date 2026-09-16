@@ -55,6 +55,11 @@ const jeniAPI = {
     };
   },
 
+  // AI Settings API. The API key never enters the renderer process.
+  getLLMSettings: () => ipcRenderer.invoke('llm:getSettings'),
+  saveLLMSettings: (settings: { apiKey: string; baseUrl: string; model: string }) =>
+    ipcRenderer.invoke('llm:saveSettings', settings),
+
   // Native Window Controls
   minimizeWindow: () => ipcRenderer.send('window:minimize'),
   maximizeWindow: () => ipcRenderer.send('window:maximize'),

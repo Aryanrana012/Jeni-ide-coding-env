@@ -18,6 +18,14 @@ export interface AgentProgressEvent {
 }
 
 export interface IJeniAPI {
+  getLLMSettings: () => Promise<{ configured: boolean; apiKey: string; baseUrl: string; model: string }>;
+  saveLLMSettings: (settings: { apiKey: string; baseUrl: string; model: string }) => Promise<{
+    configured: boolean;
+    apiKey: string;
+    baseUrl: string;
+    model: string;
+  }>;
+
   // Workspace / Directory operations
   selectFolder: () => Promise<string | null>;
   readDirectory: (dirPath: string, workspaceRoot: string) => Promise<{ success: boolean; nodes?: FileNode[]; error?: string }>;

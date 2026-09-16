@@ -30,6 +30,7 @@ import { AgentOrchestrator } from './llm/agent';
 import { loadLLMConfig, isLLMConfigured } from './config';
 import { JENI_SYSTEM_PROMPT } from './llm/prompts';
 import { EmbedderService } from './retrieval/embedder';
+import { applyStoredLLMSettings, getPublicLLMSettings, saveLLMSettings } from './llmSettings';
 
 let mainWindow: BrowserWindow | null = null;
 let llmClient: LLMClient | null = null;
@@ -68,24 +69,28 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
-  // Initialize LLM client and agent if configured
-  if (isLLMConfigured()) {
-    try {
-      const config = loadLLMConfig();
-      llmClient = new LLMClient(config);
-      console.log('[Jeni Agent] LLM client initialized');
+function initializeAgent(): void {
+  agentOrchestrator = null;
+  llmClient = null;
 
-      // Get workspace root (use app userData for now, or pass from React)
-      const workspaceRoot = process.cwd();
-      agentOrchestrator = new AgentOrchestrator(llmClient, workspaceRoot);
-      console.log('[Jeni Agent] Agent orchestrator ready');
-    } catch (error) {
-      console.warn('[Jeni Agent] LLM configuration error:', error instanceof Error ? error.message : error);
-    }
-  } else {
-    console.warn('[Jeni Agent] LLM not configured. Set JENI_LLM_API_KEY to enable.');
+  if (!isLLMConfigured()) {
+    console.warn('[Jeni Agent] LLM not configured. Set it in Jeni Settings to enable.');
+    return;
   }
+
+  try {
+    const config = loadLLMConfig();
+    llmClient = new LLMClient(config);
+    agentOrchestrator = new AgentOrchestrator(llmClient, process.cwd());
+    console.log('[Jeni Agent] LLM client initialized');
+  } catch (error) {
+    console.warn('[Jeni Agent] LLM configuration error:', error instanceof Error ? error.message : error);
+  }
+}
+
+app.whenReady().then(() => {
+  applyStoredLLMSettings();
+  initializeAgent();
 
   setupIPCHandlers();
   createWindow();
@@ -110,6 +115,14 @@ app.on('window-all-closed', () => {
 });
 
 function setupIPCHandlers() {
+  ipcMain.handle('llm:getSettings', () => getPublicLLMSettings());
+
+  ipcMain.handle('llm:saveSettings', (_, settings: { apiKey: string; baseUrl: string; model: string }) => {
+    const savedSettings = saveLLMSettings(settings);
+    initializeAgent();
+    return savedSettings;
+  });
+
   // Folder Dialog
   ipcMain.handle('dialog:selectFolder', async () => {
     if (!mainWindow) return null;
