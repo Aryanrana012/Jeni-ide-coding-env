@@ -11,8 +11,10 @@ import { WelcomeScreen } from './components/WelcomeScreen/WelcomeScreen';
 import { CommandPalette } from './components/CommandPalette/CommandPalette';
 import { QuickOpen } from './components/QuickOpen/QuickOpen';
 import { UnsavedChangesModal } from './components/Modals/UnsavedChangesModal';
+import { AISettingsModal } from './components/Modals/AISettingsModal';
 
 export const App: React.FC = () => {
+  const [isAISettingsOpen, setIsAISettingsOpen] = React.useState(false);
   const {
     workspaceRoot,
     saveActiveFile,
@@ -79,7 +81,7 @@ export const App: React.FC = () => {
           {/* Main IDE Workspace Area */}
           <div className="flex-1 flex overflow-hidden">
             {/* Activity Bar */}
-            <ActivityBar />
+            <ActivityBar onOpenSettings={() => setIsAISettingsOpen(true)} />
 
             {/* Left Collapsible Sidebar */}
             <Sidebar />
@@ -106,6 +108,7 @@ export const App: React.FC = () => {
       <CommandPalette />
       <QuickOpen />
       <UnsavedChangesModal />
+      <AISettingsModal isOpen={isAISettingsOpen} onClose={() => setIsAISettingsOpen(false)} />
     </div>
   );
 };
