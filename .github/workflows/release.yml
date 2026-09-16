@@ -26,7 +26,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and publish Windows installer
-        run: npm run dist -- --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Windows installer
+        run: npm run dist
+
+      - name: Upload installer to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Jeni IDE ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            release/*.exe
+            release/*.blockmap
+            release/latest.yml
